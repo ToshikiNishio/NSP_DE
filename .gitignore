@@ -1,0 +1,7 @@
+.DS_Store
+*.swp // これも指定しておくと便利
+
+//xcodeのgit管理不要フォルダ
+project.xcworkspace/
+xcuserdata/
+build/
