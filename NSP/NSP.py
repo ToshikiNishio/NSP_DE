@@ -24,5 +24,8 @@ if __name__ == '__main__':
                           index=MAN, columns=DAY)
     print(matrix)
     matrix = np.floor(matrix)
-    print("行=人, 列=日数")
+    print(matrix)
+    for index, work in enumerate(WORK):
+        matrix = matrix.replace(index, work)
+    matrix = matrix.replace(0, 100)
     print(matrix)
