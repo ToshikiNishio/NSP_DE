@@ -27,5 +27,4 @@ if __name__ == '__main__':
     print(matrix)
     for index, work in enumerate(WORK):
         matrix = matrix.replace(index, work)
-    matrix = matrix.replace(0, 100)
     print(matrix)
