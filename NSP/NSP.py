@@ -8,6 +8,7 @@ Created on Thu Jul  5 00:08:48 2018
 import pandas as pd
 import numpy as np
 import EvaluateFunctions
+from DE import DE
 
 
 if __name__ == '__main__':
@@ -38,3 +39,4 @@ if __name__ == '__main__':
     for index, work in enumerate(WORK):
         matrix = matrix.replace(index, work)
     print(matrix)
+    de = DE()
