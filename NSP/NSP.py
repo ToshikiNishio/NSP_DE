@@ -8,7 +8,7 @@ Created on Thu Jul  5 00:08:48 2018
 import pandas as pd
 import numpy as np
 import EvaluateFunctions
-from DE import DE
+from DE import DE, importGlobal
 
 
 if __name__ == '__main__':
@@ -39,4 +39,6 @@ if __name__ == '__main__':
     for index, work in enumerate(WORK):
         matrix = matrix.replace(index, work)
     print(matrix)
-    de = DE(DAY=DAY, WORK=WORK, requiredManNum=requiredManNum, MAN=MAN)
+    importGlobal(gl_DAY=DAY, gl_WORK=WORK, gl_requiredManNum=requiredManNum,
+                 gl_MAN=MAN)  # DEモジュールにグローバル変数をimport
+    de = DE()

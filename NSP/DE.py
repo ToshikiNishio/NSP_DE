@@ -7,6 +7,20 @@ Created on Thu Jul  5 00:08:48 2018
 """
 import pandas as pd
 import numpy as np
+from EvaluateFunctions import calcH1, calcH2, calcH3, calcFitness
+
+DAY = None
+requiredManNum = None
+WORK = None
+MAN = None
+
+
+def importGlobal(gl_DAY, gl_WORK, gl_requiredManNum, gl_MAN):
+    global DAY, WORK, requiredManNum, MAN
+    DAY = gl_DAY
+    WORK = gl_WORK
+    requiredManNum = gl_requiredManNum
+    MAN = gl_MAN
 
 
 class DE(object):
@@ -21,10 +35,9 @@ class DE(object):
 
     pop = None  # Populationクラスを格納するための変数
 
-    def __init__(self, DAY, WORK, requiredManNum, MAN):
+    def __init__(self):
         print("DE initalize")
-        pop = Population(NP=self.Np, DAY=DAY, requiredManNum=requiredManNum,
-                         WORK=WORK, MAN=MAN)
+        pop = Population(NP=self.Np)
         print(pop)
 
 
@@ -34,11 +47,10 @@ class Population(object):
     '''
     pop = []  # 個体Individualのリスト
 
-    def __init__(self, NP, DAY, requiredManNum, WORK, MAN):
+    def __init__(self, NP):
         print("population initialize")
         for i in range(NP):
-            self.pop.append(Individual(DAY=DAY, requiredManNum=requiredManNum,
-                                       WORK=WORK, MAN=MAN))
+            self.pop.append(Individual())
         print(self.pop)
 
 
@@ -47,9 +59,12 @@ class Individual(object):
     indivisual of DE
     '''
     gene = None
+    H1 = None
+    H2 = None
+    H3 = None
     fitness = None
 
-    def __init__(self, MAN, DAY, WORK, requiredManNum):
+    def __init__(self):
         print("inidivisual initialize")
         # 個体の生成
         gene = pd.DataFrame()
@@ -65,3 +80,7 @@ class Individual(object):
         gene.index = DAY
         self.gene = gene
         print(self.gene)
+        print("calcH1=", calcH1())
+        print("calcH2=", calcH2())
+        print("calcH3=", calcH3())
+        print("calcFitness=", calcFitness())
