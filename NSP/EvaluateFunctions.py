@@ -7,6 +7,24 @@ Created on Thu Jul  5 00:08:48 2018
 """
 import numpy as np
 
+DAY = None
+requiredManNum = None
+WORK = None
+MAN = None
+requiredDaysMax = None
+requiredDaysMin = None
+
+
+def importGlobal(gl_DAY, gl_WORK, gl_requiredManNum, gl_MAN,
+                 gl_requiredDaysMax, gl_requiredDaysMin):
+    global DAY, WORK, requiredManNum, MAN, requiredDaysMax, requiredDaysMin
+    DAY = gl_DAY
+    WORK = gl_WORK
+    requiredManNum = gl_requiredManNum
+    MAN = gl_MAN
+    requiredDaysMax = gl_requiredDaysMax
+    requiredDaysMin = gl_requiredDaysMin
+
 
 def F1():  # 勤務パターン負荷の軽減
     return 0

@@ -8,7 +8,7 @@ Created on Thu Jul  5 00:08:48 2018
 import pandas as pd
 import numpy as np
 import EvaluateFunctions
-from DE import DE, importGlobal
+import DE
 
 
 if __name__ == '__main__':
@@ -29,6 +29,18 @@ if __name__ == '__main__':
         "07/04": {"休み": 2, "日勤": 1, "準夜勤": 0, "夜勤": 1},
         "07/05": {"休み": 2, "日勤": 2, "準夜勤": 0, "夜勤": 0},
     }
+    requiredDaysMax = {  # 項目の最大値はDAY,最小値は0
+        "A": {"休み": 2, "日勤": 5, "準夜勤": 0, "夜勤": 0},
+        "B": {"休み": 2, "日勤": 2, "準夜勤": 2, "夜勤": 1},
+        "C": {"休み": 4, "日勤": 0, "準夜勤": 1, "夜勤": 2},
+        "D": {"休み": 2, "日勤": 3, "準夜勤": 3, "夜勤": 3},
+    }
+    requiredDaysMin = {  # 項目の最大値はrequiredDaysMaxの対応する項目,最小値は0
+        "A": {"休み": 1, "日勤": 1, "準夜勤": 0, "夜勤": 0},
+        "B": {"休み": 1, "日勤": 1, "準夜勤": 1, "夜勤": 0},
+        "C": {"休み": 1, "日勤": 0, "準夜勤": 0, "夜勤": 0},
+        "D": {"休み": 0, "日勤": 2, "準夜勤": 2, "夜勤": 2},
+    }
 
     # 表示する勤務表作成
     matrix = pd.DataFrame(np.random.rand(len(MAN), len(DAY)) * len(WORK),
@@ -39,6 +51,12 @@ if __name__ == '__main__':
     for index, work in enumerate(WORK):
         matrix = matrix.replace(index, work)
     print(matrix)
-    importGlobal(gl_DAY=DAY, gl_WORK=WORK, gl_requiredManNum=requiredManNum,
-                 gl_MAN=MAN)  # DEモジュールにグローバル変数をimport
-    de = DE()
+    # グローバル変数をimport
+    DE.importGlobal(gl_DAY=DAY, gl_WORK=WORK, gl_requiredManNum=requiredManNum,
+                    gl_MAN=MAN)
+    EvaluateFunctions.importGlobal(gl_DAY=DAY, gl_WORK=WORK,
+                                   gl_requiredManNum=requiredManNum,
+                                   gl_MAN=MAN,
+                                   gl_requiredDaysMax=requiredDaysMax,
+                                   gl_requiredDaysMin=requiredDaysMin)
+    de = DE.DE()
