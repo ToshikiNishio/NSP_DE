@@ -13,21 +13,16 @@ class DE(object):
     '''
     Differential Evolution
     '''
-    S = None  # スケーリングファクター
-    Cr = None  # 交差率
-    Pm = None  # 突然変異率
-    Np = None  # 個体数
-    MaxGen = None  # 最大世代数
+    S = 0.4  # スケーリングファクター
+    Cr = 0.9  # 交差率
+    Pm = 0.01  # 突然変異率
+    Np = 50  # 個体数
+    MaxGen = 100000  # 最大世代数
 
     pop = None  # Populationクラスを格納するための変数
 
     def __init__(self, DAY, WORK, requiredManNum, MAN):
         print("DE initalize")
-        self.S = 0.4
-        self.Cr = 0.9
-        self.Pm = 0.01
-        self.Np = 50  # 50
-        self.MaxGen = 100000
         pop = Population(NP=self.Np, DAY=DAY, requiredManNum=requiredManNum,
                          WORK=WORK, MAN=MAN)
         print(pop)
@@ -52,6 +47,7 @@ class Individual(object):
     indivisual of DE
     '''
     gene = None
+    fitness = None
 
     def __init__(self, MAN, DAY, WORK, requiredManNum):
         print("inidivisual initialize")
