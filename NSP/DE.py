@@ -7,7 +7,9 @@ Created on Thu Jul  5 00:08:48 2018
 """
 import pandas as pd
 import numpy as np
-from EvaluateFunctions import calcH1, calcH2, calcH3, calcFitness
+import random
+import copy
+from EvaluateFunctions import calcFitness
 
 DAY = None
 requiredManNum = None
@@ -34,11 +36,13 @@ class DE(object):
     MaxGen = 100000  # 最大世代数
 
     pop = None  # Populationクラスを格納するための変数
+    curGen = 1  # 現在の世代数
 
     def __init__(self):
         print("DE initalize")
         pop = Population(NP=self.Np)
         print(pop)
+        pop.generateMutantParent()
 
 
 class Population(object):
@@ -52,6 +56,20 @@ class Population(object):
         for i in range(NP):
             self.pop.append(Individual())
         print(self.pop)
+        print("max_fitness=", max(self.pop, key=lambda x: x.fitness).fitness)
+        print("min_fitness=", min(self.pop, key=lambda x: x.fitness).fitness)
+
+    def generateMutantParent(self):  # 差分変異親個体vの生成
+        print("generateDifferentialMutantParent")
+        for ind in self.pop:
+            parent_pool = copy.copy(self.pop)
+            # print("pop=", len(parent_pool), parent_pool)
+            print("ind=", ind)
+            parent_pool.remove(ind)  # 対象親個体の除外
+            # print("parent_pool=", len(parent_pool), parent_pool)
+            parents = random.sample(parent_pool, 3)  # ランダムに異なる3個体選ぶ
+            print(parents)
+            print("----------------------------------------------------------")
 
 
 class Individual(object):
