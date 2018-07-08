@@ -16,6 +16,12 @@ requiredManNum = None
 WORK = None
 MAN = None
 
+S = 0.4  # スケーリングファクター
+Cr = 0.9  # 交差率
+Pm = 0.01  # 突然変異率
+NP = 50  # 個体数
+MaxGen = 100000  # 最大世代数
+
 
 def importGlobal(gl_DAY, gl_WORK, gl_requiredManNum, gl_MAN):
     global DAY, WORK, requiredManNum, MAN
@@ -29,18 +35,13 @@ class DE(object):
     '''
     Differential Evolution
     '''
-    S = 0.4  # スケーリングファクター
-    Cr = 0.9  # 交差率
-    Pm = 0.01  # 突然変異率
-    Np = 50  # 個体数
-    MaxGen = 100000  # 最大世代数
 
     pop = None  # Populationクラスを格納するための変数
     curGen = 1  # 現在の世代数
 
     def __init__(self):
         print("DE initalize")
-        pop = Population(NP=self.Np)
+        pop = Population()
         print(pop)
         pop.generateMutantParent()
 
@@ -51,7 +52,7 @@ class Population(object):
     '''
     pop = []  # 個体Individualのリスト
 
-    def __init__(self, NP):
+    def __init__(self):
         print("population initialize")
         for i in range(NP):
             self.pop.append(Individual())
@@ -63,12 +64,25 @@ class Population(object):
         print("generateDifferentialMutantParent")
         for ind in self.pop:
             parent_pool = copy.copy(self.pop)
-            # print("pop=", len(parent_pool), parent_pool)
             print("ind=", ind)
             parent_pool.remove(ind)  # 対象親個体の除外
-            # print("parent_pool=", len(parent_pool), parent_pool)
             parents = random.sample(parent_pool, 3)  # ランダムに異なる3個体選ぶ
-            print(parents)
+            P1 = parents[0].gene.stack()
+            P2 = parents[1].gene.stack()
+            P3 = parents[2].gene.stack()
+            mutantParent = P1 + S * (P2 - P3)
+            # 上下限制約を満たすようにマッピング
+            mapFucn = lambda x: 0 if x < 0 else len(WORK)-1 if x > len(WORK)-1 else x
+            mutantParent = mutantParent.map(mapFucn)
+            mutantParent = np.round(mutantParent)  # 四捨五入で整数に変換
+            print("mutantParent")
+            print(mutantParent)
+            # P1 = P1.unstack()
+            # P2 = P2.unstack()
+            # P3 = P3.unstack()
+            # print(P1)
+            # print(P2)
+            # print(P3)
             print("----------------------------------------------------------")
 
 
