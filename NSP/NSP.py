@@ -18,9 +18,7 @@ if __name__ == '__main__':
     WORK = ["休み", "日勤", "準夜勤", "夜勤"]
     GROUP = ["バイト", "社員"]
     # PROBLEM = []  # 未設定
-    PROBLEM = EvaluateFunctions.getFunctions()
-    for func in PROBLEM:
-        print(func, func())
+    PROBLEM = None
 
     requiredManNum = {  # それぞれの日の合算はMAN人となる
         "07/01": {"休み": 2, "日勤": 2, "準夜勤": 0, "夜勤": 0},

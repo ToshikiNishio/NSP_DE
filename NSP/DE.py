@@ -80,7 +80,5 @@ class Individual(object):
         gene.index = DAY
         self.gene = gene
         print(self.gene)
-        print("calcH1=", calcH1())
-        print("calcH2=", calcH2())
-        print("calcH3=", calcH3())
-        print("calcFitness=", calcFitness())
+        self.fitness, self.H1, self.H2, self.H3 = calcFitness(self.gene)
+        print(self.fitness, self.H1)

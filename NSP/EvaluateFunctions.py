@@ -34,8 +34,23 @@ def F2():  # 禁止パターンの低減
     return 0
 
 
-def F3():  # 必要日数の確保
-    return 0
+def F3(gene):  # 必要日数の確保
+    fit = 0
+    for man in MAN:
+        for work_index, work in enumerate(WORK):
+            workDay = 0
+            for day in DAY:
+                if work_index == gene.at[day, man]:
+                    # print(man, work, day, gene.at[day, man])
+                    workDay += 1
+            # print(man, work)
+            # print("workDay=", workDay)
+            p_max = max(workDay - requiredDaysMax[man][work], 0)
+            p_min = max(requiredDaysMin[man][work] - workDay, 0)
+            # print("p_max=", p_max, "p_min=", p_min)
+            fit += p_max + p_min
+    # print("fit=", fit)
+    return fit
 
 
 def F4():  # 勤務間隔の均等化
@@ -54,12 +69,8 @@ def F7():  # 勤務の質の確保
     return 0
 
 
-def getFunctions():
-    return [F1, F2, F3, F4, F5, F6, F7]
-
-
-def calcH1():
-    return F2() + F3()
+def calcH1(gene):
+    return F2() + F3(gene)
 
 
 def calcH2():
@@ -70,9 +81,9 @@ def calcH3():
     return F6() + F7()
 
 
-def calcFitness():
-    H1 = calcH1()
+def calcFitness(gene):
+    H1 = calcH1(gene)
     H2 = calcH2()
     H3 = calcH3()
     array = np.array([H1, H2, H3])
-    return np.linalg.norm(array)
+    return np.linalg.norm(array), H1, H2, H3
