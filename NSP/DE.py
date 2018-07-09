@@ -103,20 +103,6 @@ class Individual(object):
         print(self.gene)
         self.fitness, self.H1, self.H2, self.H3 = calcFitness(self.gene)
         print(self.fitness, self.H1)
-        '''
-
-            for index, work in enumerate(WORK):
-                num = requiredManNum[day][work]
-                series = pd.concat([series, pd.Series(np.ones(num) * index)])
-            series.index = MAN
-            np.random.shuffle(series)  # ランダムに並び替え
-            gene = gene.append(series, ignore_index=True)
-        gene.index = DAY
-        self.gene = gene
-        print(self.gene)
-        self.fitness, self.H1, self.H2, self.H3 = calcFitness(self.gene)
-        print(self.fitness, self.H1)
-        '''
 
     def generateMutantParent(self, parents):  # 差分変異親個体vの生成
         P1 = parents[0].gene.stack()
