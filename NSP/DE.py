@@ -64,26 +64,9 @@ class Population(object):
         print("generateDifferentialMutantParent")
         for ind in self.pop:
             parent_pool = copy.copy(self.pop)
-            print("ind=", ind)
             parent_pool.remove(ind)  # 対象親個体の除外
             parents = random.sample(parent_pool, 3)  # ランダムに異なる3個体選ぶ
-            P1 = parents[0].gene.stack()
-            P2 = parents[1].gene.stack()
-            P3 = parents[2].gene.stack()
-            mutantParent = P1 + S * (P2 - P3)
-            # 上下限制約を満たすようにマッピング
-            mapFucn = lambda x: 0 if x < 0 else len(WORK)-1 if x > len(WORK)-1 else x
-            mutantParent = mutantParent.map(mapFucn)
-            mutantParent = np.round(mutantParent)  # 四捨五入で整数に変換
-            print("mutantParent")
-            print(mutantParent)
-            # P1 = P1.unstack()
-            # P2 = P2.unstack()
-            # P3 = P3.unstack()
-            # print(P1)
-            # print(P2)
-            # print(P3)
-            print("----------------------------------------------------------")
+            ind.generateMutantParent(parents)
 
 
 class Individual(object):
@@ -114,3 +97,25 @@ class Individual(object):
         print(self.gene)
         self.fitness, self.H1, self.H2, self.H3 = calcFitness(self.gene)
         print(self.fitness, self.H1)
+
+    def generateMutantParent(self, parents):  # 差分変異親個体vの生成
+        P1 = parents[0].gene.stack()
+        P2 = parents[1].gene.stack()
+        P3 = parents[2].gene.stack()
+        mutantParent = P1 + S * (P2 - P3)
+        # 上下限制約を満たすようにマッピング
+        mapFucn = lambda x: 0 if x < 0 else len(WORK)-1 if x > len(WORK)-1 else x
+        mutantParent = mutantParent.map(mapFucn)
+        mutantParent = np.round(mutantParent)  # 四捨五入で整数に変換
+        self.createChild(mutantParent)
+        print("----------------------------------------------------------")
+
+    def createChild(self, mutantParent):
+        print("mutantParent")
+        print(mutantParent.unstack())
+        print("gene")
+        print(self.gene)
+        print("mutantParent len=", len(mutantParent))
+        start = np.random.randint(len(mutantParent))
+        print("start=", start)
+        print("----------------------------------------------------------")
