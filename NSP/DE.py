@@ -43,7 +43,7 @@ class DE(object):
         print("DE initalize")
         pop = Population()
         print(pop)
-        # pop.generateMutantParent()
+        pop.generateMutantParent()
 
 
 class Population(object):
@@ -105,18 +105,24 @@ class Individual(object):
         print(self.fitness, self.H1)
 
     def generateMutantParent(self, parents):  # 差分変異親個体vの生成
-        P1 = parents[0].gene.stack()
-        P2 = parents[1].gene.stack()
-        P3 = parents[2].gene.stack()
+        P1 = parents[0].gene
+        P2 = parents[1].gene
+        P3 = parents[2].gene
+        print("P1,2,3")
+        print(P1, P2, P3)
         mutantParent = P1 + S * (P2 - P3)
         # 上下限制約を満たすようにマッピング
         mapFucn = lambda x: 0 if x < 0 else len(WORK)-1 if x > len(WORK)-1 else x
         mutantParent = mutantParent.map(mapFucn)
         mutantParent = np.round(mutantParent)  # 四捨五入で整数に変換
+        print("mutantParent 四捨五入")
+        print(mutantParent)
         self.createChild(mutantParent)
-        print("----------------------------------------------------------")
+ 
 
     def createChild(self, mutantParent):
+        print("createChild")
+        """
         print("mutantParent")
         print(mutantParent.unstack())
         print("mutantParent len=", len(mutantParent))
@@ -136,3 +142,4 @@ class Individual(object):
         # child.iloc[start: start+count] = mutantParent.iloc[start: start+count]
         # print("child=", child)
         print("----------------------------------------------------------")
+        """
