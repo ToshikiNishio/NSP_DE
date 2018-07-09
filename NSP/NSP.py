@@ -41,10 +41,10 @@ if __name__ == '__main__':
     }
 
     # 表示する勤務表作成
-    matrix = pd.DataFrame(np.random.rand(len(MAN), len(DAY)) * len(WORK),
+
+    matrix = pd.DataFrame(np.random.randint(0, len(WORK),
+                                            (len(MAN), len(DAY))),
                           index=MAN, columns=DAY)
-    print(matrix)
-    matrix = np.floor(matrix)
     print(matrix)
     for index, work in enumerate(WORK):
         matrix = matrix.replace(index, work)
