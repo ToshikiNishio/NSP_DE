@@ -6,6 +6,7 @@ Created on Thu Jul  5 00:08:48 2018
 @author: toshiki
 """
 import numpy as np
+import collections
 
 DAY = None
 requiredManNum = None
@@ -36,20 +37,17 @@ def F2():  # 禁止パターンの低減
 
 def F3(gene):  # 必要日数の確保
     fit = 0
-    for man in MAN:
-        for work_index, work in enumerate(WORK):
-            workDay = 0
-            for day in DAY:
-                if work_index == gene.at[day, man]:
-                    # print(man, work, day, gene.at[day, man])
-                    workDay += 1
-            # print(man, work)
-            # print("workDay=", workDay)
-            p_max = max(workDay - requiredDaysMax[man][work], 0)
-            p_min = max(requiredDaysMin[man][work] - workDay, 0)
-            # print("p_max=", p_max, "p_min=", p_min)
-            fit += p_max + p_min
-    # print("fit=", fit)
+    for index, man in enumerate(MAN):
+        man_gene = gene.ix[(gene == index)]  # manでフィルタリング
+        # workインデックスのリストを取得
+        work_list = man_gene.index.get_level_values("work")
+        count_dict = collections.Counter(work_list)  # カウントした辞書作成
+        for work in WORK:
+            if work in count_dict:
+                p_max = max(count_dict[work] - requiredDaysMax[man][work], 0)
+                p_min = max(requiredDaysMin[man][work] - count_dict[work], 0)
+                fit += p_max + p_min
+
     return fit
 
 

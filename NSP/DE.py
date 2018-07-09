@@ -57,8 +57,8 @@ class Population(object):
         for i in range(NP):
             self.pop.append(Individual())
         print(self.pop)
-        # print("max_fitness=", max(self.pop, key=lambda x: x.fitness).fitness)
-        # print("min_fitness=", min(self.pop, key=lambda x: x.fitness).fitness)
+        print("max_fitness=", max(self.pop, key=lambda x: x.fitness).fitness)
+        print("min_fitness=", min(self.pop, key=lambda x: x.fitness).fitness)
 
     def generateMutantParent(self):  # 差分変異親個体vの生成
         print("generateDifferentialMutantParent")
@@ -101,7 +101,8 @@ class Individual(object):
         self.gene = gene
         print("gene=",)
         print(self.gene)
-        # series.index = index
+        self.fitness, self.H1, self.H2, self.H3 = calcFitness(self.gene)
+        print(self.fitness, self.H1)
         '''
 
             for index, work in enumerate(WORK):
