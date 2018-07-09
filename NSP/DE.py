@@ -90,7 +90,7 @@ class Individual(object):
                 num = requiredManNum[day][work]
                 series = pd.concat([series, pd.Series(np.ones(num) * index)])
             series.index = MAN
-            np.random.shuffle(series)
+            np.random.shuffle(series)  # ランダムに並び替え
             gene = gene.append(series, ignore_index=True)
         gene.index = DAY
         self.gene = gene
@@ -113,9 +113,20 @@ class Individual(object):
     def createChild(self, mutantParent):
         print("mutantParent")
         print(mutantParent.unstack())
-        print("gene")
-        print(self.gene)
         print("mutantParent len=", len(mutantParent))
         start = np.random.randint(len(mutantParent))
         print("start=", start)
+        count = 1  # 交叉で交換する数
+        while True:
+            if np.random.rand() > Cr or count == len(mutantParent):
+                break
+            else:
+                count += 1
+        print("count=", count)
+        gene = self.gene.stack()
+        print("gene=", gene)
+        print(gene.iloc[start: start+count])
+        # child = gene
+        # child.iloc[start: start+count] = mutantParent.iloc[start: start+count]
+        # print("child=", child)
         print("----------------------------------------------------------")
