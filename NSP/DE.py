@@ -169,11 +169,11 @@ class Individual(object):
             cross_pool = mutant_gene[mutant_gene.isin(cross_gene)]
             for count, ind in enumerate(cross_idx_day):
                 new_gene.iat[ind] = cross_pool.iat[count]
-        print("new_gene")
-        print(new_gene)
-        print("********************************")
+        # 子個体生成
         child = copy.copy(self)
-        print(child)
+        child.gene = new_gene
+        print("child.gene")
         print(child.gene)
+        print("********************************")
         return child
         
