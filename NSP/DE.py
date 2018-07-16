@@ -62,13 +62,19 @@ class Population(object):
 
     def createChild(self):
         # 個体毎に子供作成
-        for ind in self.pop:
+        for idx, ind in enumerate(self.pop):
             parent_pool = copy.copy(self.pop)
             parent_pool.remove(ind)  # 対象親個体の除外
             parents = random.sample(parent_pool, 3)  # ランダムに異なる3個体選ぶ
             mutantParent = ind.generateMutantParent(parents)  # 差分変異親個体vの生成
             child = ind.createChild(mutantParent)  # 子個体生成
-            print(child)
+            print("parentFitness=", ind.fitness)
+            print("childFitness=", child.fitness)
+            if child.fitness <= ind.fitness:
+                print(self.pop)
+                print("ind=", ind, "child=", child)
+                self.pop[idx] = child
+                print(self.pop)
 
 
 class Individual(object):
@@ -103,8 +109,11 @@ class Individual(object):
         self.gene = gene
         print("gene=",)
         print(self.gene)
+        self.calcFitness()
+
+    def calcFitness(self):  # 適応度計算
         self.fitness, self.H1, self.H2, self.H3 = calcFitness(self.gene)
-        print(self.fitness, self.H1)
+        print("fitness=", self.fitness, "H1=", self.H1)
 
     def generateMutantParent(self, parents):  # 差分変異親個体vの生成
         P1 = parents[0].gene
@@ -172,6 +181,7 @@ class Individual(object):
         # 子個体生成
         child = copy.copy(self)
         child.gene = new_gene
+        child.calcFitness()
         print("child.gene")
         print(child.gene)
         print("********************************")
