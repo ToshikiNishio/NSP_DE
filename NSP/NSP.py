@@ -38,15 +38,6 @@ if __name__ == '__main__':
         "C": {"休み": 1, "日勤": 0, "準夜勤": 0, "夜勤": 0},
     }
 
-    # 表示する勤務表作成
-
-    matrix = pd.DataFrame(np.random.randint(0, len(WORK),
-                                            (len(MAN), len(DAY))),
-                          index=MAN, columns=DAY)
-    print(matrix)
-    for index, work in enumerate(WORK):
-        matrix = matrix.replace(index, work)
-    print(matrix)
     # グローバル変数をimport
     DE.importGlobal(gl_DAY=DAY, gl_WORK=WORK, gl_requiredManNum=requiredManNum,
                     gl_MAN=MAN)
@@ -55,7 +46,18 @@ if __name__ == '__main__':
                                    gl_MAN=MAN,
                                    gl_requiredDaysMax=requiredDaysMax,
                                    gl_requiredDaysMin=requiredDaysMin)
-
+    # DEにより勤務表を計算
     min_ind = DE.DE()
     print("fitness", min_ind.fitness)
-    print("gene=", min_ind.gene)
+    gene = min_ind.gene
+    print("gene=", gene)
+    # 表示する勤務表作成
+    matrix = pd.DataFrame(np.full((len(MAN), len(DAY)), None),
+                          index=MAN, columns=DAY)
+    for idx, man in enumerate(MAN):
+        gene = gene.replace(idx, man)
+        filter_schedule = gene.loc[gene == man]
+        work_list = filter_schedule.index.get_level_values("work")
+        for idx, day in enumerate(DAY):
+            matrix.at[man, day] = work_list[idx]
+    print(matrix)
