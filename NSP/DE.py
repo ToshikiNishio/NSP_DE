@@ -43,7 +43,7 @@ class DE(object):
         print("DE initalize")
         pop = Population()
         print(pop)
-        pop.generateMutantParent()
+        pop.createChild()
 
 
 class Population(object):
@@ -60,13 +60,14 @@ class Population(object):
         print("max_fitness=", max(self.pop, key=lambda x: x.fitness).fitness)
         print("min_fitness=", min(self.pop, key=lambda x: x.fitness).fitness)
 
-    def generateMutantParent(self):  # 差分変異親個体vの生成
-        print("generateDifferentialMutantParent")
+    def createChild(self):  
+        # 個体毎に子供作成
         for ind in self.pop:
             parent_pool = copy.copy(self.pop)
             parent_pool.remove(ind)  # 対象親個体の除外
             parents = random.sample(parent_pool, 3)  # ランダムに異なる3個体選ぶ
-            ind.generateMutantParent(parents)
+            mutantParent = ind.generateMutantParent(parents)  # 差分変異親個体vの生成
+            ind.createChild(mutantParent)
 
 
 class Individual(object):
@@ -118,7 +119,7 @@ class Individual(object):
             mutantParent.iloc[st: end] = argsort_list
         print("mutantParent")
         print(mutantParent)
-        self.createChild(mutantParent)
+        return mutantParent
 
     def createChild(self, mutantParent):
         print("createChild***********************")
