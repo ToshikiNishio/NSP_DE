@@ -55,4 +55,7 @@ if __name__ == '__main__':
                                    gl_MAN=MAN,
                                    gl_requiredDaysMax=requiredDaysMax,
                                    gl_requiredDaysMin=requiredDaysMin)
-    de = DE.DE()
+
+    min_ind = DE.DE()
+    print("fitness", min_ind.fitness)
+    print("gene=", min_ind.gene)

@@ -31,31 +31,25 @@ def importGlobal(gl_DAY, gl_WORK, gl_requiredManNum, gl_MAN):
     MAN = gl_MAN
 
 
-class DE(object):
+def DE():
     '''
     Differential Evolution
     '''
-
-    curGen = 1  # 現在の世代数
-
-    def __init__(self):
-        print("DE initalize")
-        pop = Population()
-        print(pop)
-        for gen in range(MaxGen):
-            print("gen=", gen, "********************************************")
-            pop.createChild()
-            max_ind = max(pop.pop, key=lambda x: x.fitness)
-            print("max_fitness=", max_ind.fitness)
-            min_ind = min(pop.pop, key=lambda x: x.fitness)
-            print("min_fitness=", min_ind.fitness)
-            if min_ind.fitness == 0:
-                print("Calculation is end. Fitness is 0")
-                print("gene=", min_ind.gene)
-                return
-        print("Calculation is end. 最大世代数まで計算終了")
-        print("gene=", min_ind.gene)
-        return
+    print("DE initalize")
+    pop = Population()
+    print(pop)
+    for gen in range(MaxGen):
+        print("gen=", gen, "********************************************")
+        pop.createChild()
+        max_ind = max(pop.pop, key=lambda x: x.fitness)
+        print("max_fitness=", max_ind.fitness)
+        min_ind = min(pop.pop, key=lambda x: x.fitness)
+        print("min_fitness=", min_ind.fitness)
+        if min_ind.fitness == 0:
+            print("Calculation is end. Fitness is 0")
+            return min_ind
+    print("Calculation is end. 最大世代数まで計算終了")
+    return min_ind
 
 
 class Population(object):
@@ -68,7 +62,6 @@ class Population(object):
         print("population initialize")
         for i in range(NP):
             self.pop.append(Individual())
-        print(self.pop)
         print("max_fitness=", max(self.pop, key=lambda x: x.fitness).fitness)
         print("min_fitness=", min(self.pop, key=lambda x: x.fitness).fitness)
 
@@ -100,7 +93,6 @@ class Individual(object):
         index = []
         for day in DAY:
             # day日の遺伝子を作成
-            print(day)
             series = pd.Series(np.arange(len(MAN)))
             for work in WORK:
                 num = requiredManNum[day][work]
