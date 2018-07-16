@@ -36,14 +36,26 @@ class DE(object):
     Differential Evolution
     '''
 
-    pop = None  # Populationクラスを格納するための変数
     curGen = 1  # 現在の世代数
 
     def __init__(self):
         print("DE initalize")
         pop = Population()
         print(pop)
-        pop.createChild()
+        for gen in range(MaxGen):
+            print("gen=", gen, "********************************************")
+            pop.createChild()
+            max_ind = max(pop.pop, key=lambda x: x.fitness)
+            print("max_fitness=", max_ind.fitness)
+            min_ind = min(pop.pop, key=lambda x: x.fitness)
+            print("min_fitness=", min_ind.fitness)
+            if min_ind.fitness == 0:
+                print("Calculation is end. Fitness is 0")
+                print("gene=", min_ind.gene)
+                return
+        print("Calculation is end. 最大世代数まで計算終了")
+        print("gene=", min_ind.gene)
+        return
 
 
 class Population(object):
@@ -68,13 +80,8 @@ class Population(object):
             parents = random.sample(parent_pool, 3)  # ランダムに異なる3個体選ぶ
             mutantParent = ind.generateMutantParent(parents)  # 差分変異親個体vの生成
             child = ind.createChild(mutantParent)  # 子個体生成
-            print("parentFitness=", ind.fitness)
-            print("childFitness=", child.fitness)
             if child.fitness <= ind.fitness:
-                print(self.pop)
-                print("ind=", ind, "child=", child)
                 self.pop[idx] = child
-                print(self.pop)
 
 
 class Individual(object):
@@ -88,7 +95,6 @@ class Individual(object):
     fitness = None
 
     def __init__(self):
-        print("inidivisual initialize")
         # 個体の生成
         gene = pd.Series()
         index = []
@@ -99,43 +105,36 @@ class Individual(object):
             for work in WORK:
                 num = requiredManNum[day][work]
                 for n in range(num):
-                    # index.append(day + "-" + work)
                     index.append((day, work))
             np.random.shuffle(series)  # ランダムに並び替え
-            # gene = gene.append(series)
             gene = pd.concat([gene, series])
         index = pd.MultiIndex.from_tuples(index, names=['day', 'work'])
         gene.index = index
         self.gene = gene
-        print("gene=",)
-        print(self.gene)
         self.calcFitness()
 
     def calcFitness(self):  # 適応度計算
         self.fitness, self.H1, self.H2, self.H3 = calcFitness(self.gene)
-        print("fitness=", self.fitness, "H1=", self.H1)
+        # print("fitness=", self.fitness, "H1=", self.H1)
 
     def generateMutantParent(self, parents):  # 差分変異親個体vの生成
         P1 = parents[0].gene
         P2 = parents[1].gene
         P3 = parents[2].gene
-        print("P1,2,3")
-        print(P1, P2, P3)
+
         mutantParent = P1 + S * (P2 - P3)
         for index, day in enumerate(DAY):
             st, end = index*len(MAN), index*(len(MAN)) + len(MAN)
             gene = mutantParent.iloc[st: end]
             argsort_list = np.argsort(gene)
             mutantParent.iloc[st: end] = argsort_list
-        print("mutantParent")
-        print(mutantParent)
+        # print("mutantParent")
+        # print(mutantParent)
         return mutantParent
 
     def createChild(self, mutantParent):
-        print("createChild***********************")
         gene_len = len(mutantParent)
         start = np.random.randint(gene_len)  # 交叉スタート位置 0~len(mutantParent)-1
-        print("start=", start)
         assert start < 15, "start >= 15!!!"
         # 交叉する数を決定
         count = 1  # 交叉で交換する数
@@ -144,7 +143,6 @@ class Individual(object):
                 break
             else:
                 count += 1
-        print("count=", count)
         # 交叉するインデックス取得
         if start+count < gene_len:
             cross_idx = np.arange(start, start+count)
@@ -155,10 +153,12 @@ class Individual(object):
 
         # 交叉処理
         new_gene = copy.copy(self.gene)  # 自身の遺伝子をコピー
+        """
         print("new_gene")
         print(new_gene)
         print("mutantParent")
         print(mutantParent)
+        """
         for index, day in enumerate(DAY):  # 日付で分割して交叉処理を行う
             st = index * len(MAN)  # 日付の初めのインデックス
             end = index*(len(MAN)) + len(MAN)  # 日付の終わりのインデックス
@@ -182,8 +182,10 @@ class Individual(object):
         child = copy.copy(self)
         child.gene = new_gene
         child.calcFitness()
+        """
         print("child.gene")
         print(child.gene)
         print("********************************")
+        """
         return child
         
