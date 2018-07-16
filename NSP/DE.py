@@ -60,14 +60,15 @@ class Population(object):
         print("max_fitness=", max(self.pop, key=lambda x: x.fitness).fitness)
         print("min_fitness=", min(self.pop, key=lambda x: x.fitness).fitness)
 
-    def createChild(self):  
+    def createChild(self):
         # 個体毎に子供作成
         for ind in self.pop:
             parent_pool = copy.copy(self.pop)
             parent_pool.remove(ind)  # 対象親個体の除外
             parents = random.sample(parent_pool, 3)  # ランダムに異なる3個体選ぶ
             mutantParent = ind.generateMutantParent(parents)  # 差分変異親個体vの生成
-            ind.createChild(mutantParent)
+            child = ind.createChild(mutantParent)  # 子個体生成
+            print(child)
 
 
 class Individual(object):
@@ -144,7 +145,7 @@ class Individual(object):
             cross_idx = np.hstack((tmp1, tmp2))
 
         # 交叉処理
-        new_gene = self.gene  # 自身の遺伝子をコピー
+        new_gene = copy.copy(self.gene)  # 自身の遺伝子をコピー
         print("new_gene")
         print(new_gene)
         print("mutantParent")
@@ -171,3 +172,8 @@ class Individual(object):
         print("new_gene")
         print(new_gene)
         print("********************************")
+        child = copy.copy(self)
+        print(child)
+        print(child.gene)
+        return child
+        
